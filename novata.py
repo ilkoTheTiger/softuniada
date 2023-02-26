@@ -1,17 +1,27 @@
-from pprint import pprint
+from collections import deque
+parantheses = deque([el for el in input()])
 
-n = int(input())
+max_streak = 0
+streak = 0
+for par in parantheses:
+    if par == "(" and streak % 2 == 0:
+        streak += 1
+        continue
+    if par == ")" and streak % 2 == 1:
+        streak += 1
+        if max_streak < streak:
+            max_streak = streak
+        continue
 
-matrix = []
-for row in range(n):
-    matrix.append([int(num) for num in input().split()])
+    if par == ")" and streak % 2 == 0:
+        if streak > max_streak:
+            max_streak = streak
+        streak = 0
+    if par =="(" and streak % 2 == 1:
+        if streak > max_streak:
+            max_streak = streak
+        streak = 1
 
-def rotate_matrix( m ):
-    return [[m[j][i] for j in range(len(m))] for i in range(len(m[0])-1,-1,-1)]
-
-new_matrix = rotate_matrix(matrix)
-new_matrix = rotate_matrix(new_matrix)
-new_matrix = rotate_matrix(new_matrix)
-
-for row in new_matrix:
-    print(" ".join([str(x) for x in row]))
+if max_streak % 2 == 1:
+    print(max_streak -1)
+else: print(max_streak)
